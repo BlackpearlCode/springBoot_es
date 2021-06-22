@@ -1,0 +1,24 @@
+mybatis:
+  mapper-locations:
+    - classpath:mapper/*.xml
+    - classpath*:com/**/mapper/*.xml
+server:
+  port: 8080
+spring:
+  main:
+    allow-bean-definition-overriding: true # 意思是后来发现的bean会覆盖之前相同名称的bean
+  data:
+    elasticsearch:
+      connectTimeOut: 1000
+      connectionRequestTimeOut: 500
+      host: 127.0.0.1
+      maxConnectNum: 100
+      maxConnectPerRoute: 100
+      port: 9200
+      repositories:
+        enabled: true
+      socketTimeOut: 30000
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/crm?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root

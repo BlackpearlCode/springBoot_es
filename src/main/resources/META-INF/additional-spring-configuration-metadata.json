@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.data.elasticsearch.connectTimeOut",
+      "type": "java.lang.String",
+      "description": "Description for spring.data.elasticsearch.connectTimeOut."
+  }
+] }

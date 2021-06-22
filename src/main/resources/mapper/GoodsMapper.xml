@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot_es.mapper.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.example.springboot_es.entity.Goods">
+    <!--@mbg.generated-->
+    <!--@Table goods-->
+    <id column="RID" jdbcType="INTEGER" property="rid" />
+    <result column="GOODS_NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PRICE" jdbcType="FLOAT" property="price" />
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    RID, GOODS_NAME, PRICE, REMARKS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where RID = #{rid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from goods
+    where RID = #{rid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="RID" keyProperty="rid" parameterType="com.example.springboot_es.entity.Goods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into goods (GOODS_NAME, PRICE, REMARKS
+      )
+    values (#{name,jdbcType=VARCHAR}, #{price,jdbcType=FLOAT}, #{remarks,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="RID" keyProperty="rid" parameterType="com.example.springboot_es.entity.Goods" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        GOODS_NAME,
+      </if>
+      <if test="price != null">
+        PRICE,
+      </if>
+      <if test="remarks != null">
+        REMARKS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=FLOAT},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.springboot_es.entity.Goods">
+    <!--@mbg.generated-->
+    update goods
+    <set>
+      <if test="name != null">
+        GOODS_NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        PRICE = #{price,jdbcType=FLOAT},
+      </if>
+      <if test="remarks != null">
+        REMARKS = #{remarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where RID = #{rid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.springboot_es.entity.Goods">
+    <!--@mbg.generated-->
+    update goods
+    set GOODS_NAME = #{name,jdbcType=VARCHAR},
+      PRICE = #{price,jdbcType=FLOAT},
+      REMARKS = #{remarks,jdbcType=VARCHAR}
+    where RID = #{rid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select  goods_name as name, RID ,PRICE,REMARKS  from goods
+    </select>
+</mapper>
