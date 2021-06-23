@@ -46,4 +46,12 @@ public class GoodsController {
         return goodsServiceImpl.noHightQuery(keyword);
     }
 
+    //带高亮查询
+    @ResponseBody
+    @RequestMapping(value = "/HightQuery",method = RequestMethod.GET)
+    public List<Goods> HightQuery(String keyword) throws IOException {
+        return goodsServiceImpl.highlightQuery(keyword);
+    }
+
+
 }

@@ -14,6 +14,8 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -122,7 +124,7 @@ public class GoodsServiceImpl implements GoodsService {
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder()
         //在discusspost索引的name字段中查询
         .query(QueryBuilders.multiMatchQuery(keyword,"name"))
-        .sort(SortBuilders.fieldSort("price").order(SortOrder.DESC))   //价格
+        .sort(SortBuilders.fieldSort("rid").order(SortOrder.ASC))   //价格
         .from(0)  //指定从那条开始查询
         .size(10);
         searchRequest.source(searchSourceBuilder);
@@ -131,6 +133,51 @@ public class GoodsServiceImpl implements GoodsService {
         List<Goods> list=new ArrayList<>();
         for (SearchHit hit: searchResponse.getHits().getHits()) {
             Goods goods= JSONObject.parseObject(hit.getSourceAsString(),Goods.class);
+            System.out.println(goods);
+            list.add(goods);
+        }
+        return list;
+    }
+
+
+
+
+
+    /**
+     * 带高亮查询
+     */
+    public List<Goods> highlightQuery(String keyword) throws IOException {
+        //crm 就是@Document(indexName="crm")的名字，是索引也就是表名
+        SearchRequest searchRequest=new SearchRequest("crm");
+        //高亮
+        HighlightBuilder highlightBuilder=new HighlightBuilder();
+        //将分词器检索的字段设置为高亮
+        highlightBuilder.field("name");
+        //当全局高亮.field设置为："*"时，覆盖无效
+//        highlightBuilder.requireFieldMatch(false).field("*");
+        highlightBuilder.requireFieldMatch(false);
+        highlightBuilder.preTags("<span style='color:red'>");
+        highlightBuilder.postTags("</span>");
+
+        //构建搜索条件
+        SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder()
+                //在discusspost索引的name字段中查询
+                .query(QueryBuilders.multiMatchQuery(keyword,"name"))
+                .sort(SortBuilders.fieldSort("rid").order(SortOrder.ASC))   //id
+                .from(0)  //指定从那条开始查询
+                .size(10) //需要查出的总记录条数
+                .highlighter(highlightBuilder);  //高亮
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse searchResponse=restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        System.out.println(searchResponse);
+        List<Goods> list=new ArrayList<>();
+        for (SearchHit hit: searchResponse.getHits().getHits()) {
+            Goods goods= JSONObject.parseObject(hit.getSourceAsString(),Goods.class);
+            //处理高亮显示的结果
+            HighlightField nameField=hit.getHighlightFields().get("name");
+            if(nameField!=null){
+                goods.setName(nameField.getFragments()[0].toString());
+            }
             System.out.println(goods);
             list.add(goods);
         }
