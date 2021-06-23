@@ -5,7 +5,7 @@
     <!--@mbg.generated-->
     <!--@Table goods-->
     <id column="RID" jdbcType="INTEGER" property="rid" />
-    <result column="GOODS_NAME" jdbcType="VARCHAR" property="name" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="PRICE" jdbcType="FLOAT" property="price" />
     <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
   </resultMap>
@@ -84,6 +84,10 @@
   </update>
 
   <select id="selectAll" resultMap="BaseResultMap">
-    select  goods_name as name, RID ,PRICE,REMARKS  from goods
+    select  goods_name as name, RID ,PRICE,REMARKS  from goods where 1=1
+    <if test="name != null">
+      and GOODS_NAME=#{name,jdbcType=VARCHAR}
+    </if>
+
     </select>
 </mapper>

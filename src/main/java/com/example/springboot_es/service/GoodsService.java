@@ -13,7 +13,7 @@ import java.util.List;
 public interface GoodsService{
 
     //从数据库中导入所有商品到ES
-    public  int importAll55();
+    public  int importAll55(Goods goods);
 
     //根据id删除商品
     public void delete(Long id);
